@@ -80,4 +80,24 @@ public class JpaMappingTest {
         assertThat(savedTodo.getIsComplete()).isEqualTo(true);
     }
 
+    @Test
+    @DisplayName("삭제 테스트")
+    public void test_delete() {
+        // GIVEN
+        Todo todo = getSaved();
+        System.out.println("=========================");
+        System.out.println(todo.getId());
+        System.out.println(todo.getContent());
+        System.out.println(todo.getIsComplete());
+        System.out.println(todo.getCreatedDateTime());
+        System.out.println("=========================");
+        Long id = todo.getId();
+
+        // WHEN
+        todoRepository.deleteById(id);
+
+        // THEN
+        assertThat(entityManager.find(Todo.class, id)).isNull();
+    }
+
 }
