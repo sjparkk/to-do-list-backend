@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @DataJpaTest
 public class JpaMappingTest {
 
@@ -49,8 +51,33 @@ public class JpaMappingTest {
         Todo savedTodo = todoRepository.getOne(id);
 
         // THEN
-        Assertions.assertThat(savedTodo.getContent()).isEqualTo(content);
-        Assertions.assertThat(savedTodo.getContent()).isEqualTo(todo.getContent());
+        assertThat(savedTodo.getContent()).isEqualTo(content);
+        assertThat(savedTodo.getContent()).isEqualTo(todo.getContent());
+    }
+
+    @Test
+    @DisplayName("저장 테스트")
+    public void test_save() {
+        // GIVEN
+        Todo todo = Todo.builder()
+                .content("내용1")
+                .isComplete(true)
+                .createdDateTime(LocalDateTime.now())
+                .build();
+
+        // WHEN
+        Todo savedTodo = todoRepository.save(todo);
+        System.out.println("=========================");
+        System.out.println(savedTodo.getId());
+        System.out.println(savedTodo.getContent());
+        System.out.println(savedTodo.getIsComplete());
+        System.out.println(savedTodo.getCreatedDateTime());
+        System.out.println("=========================");
+
+        // THEN
+        assertThat(savedTodo.getId()).isGreaterThan(0);
+        assertThat(savedTodo.getContent()).isEqualTo("내용1");
+        assertThat(savedTodo.getIsComplete()).isEqualTo(true);
     }
 
 }
